@@ -1,42 +1,143 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-  <title>卡通IP</title>
-  <style>
-    body {
-      text-align: center;
-      font-family: Arial;
-      background-color: #f5f5f5;
-    }
+    <meta charset="UTF-8">
+    <title>平安夜祝福</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: "Microsoft YaHei", sans-serif;
+            background: linear-gradient(to bottom, #ff1744 0%, #ffffff 100%);
+            overflow-x: hidden;
+        }
 
-    img {
-      max-width: 80%;
-      margin-top: 40px;
-      border-radius: 12px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-    }
+        h1 {
+            text-align: center;
+            color: #ffffff;
+            margin-top: 40px;
+            text-shadow: 2px 2px 5px #b71c1c;
+        }
 
-    a {
-      display: inline-block;
-      margin-top: 30px;
-      text-decoration: none;
-      color: #4CAF50;
-      font-size: 18px;
-    }
-  </style>
+        img {
+            display: block;
+            margin: 20px auto;
+            max-width: 400px;
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(183,28,28,0.5);
+        }
+
+        .wish {
+            opacity: 0;
+            margin: 60px auto;
+            font-size: 24px;
+            color: #b71c1c;
+            text-align: center;
+            transform: translateY(50px);
+            transition: all 0.8s ease-out;
+        }
+
+        .wish.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .snowflake {
+            position: fixed;
+            top: -50px;
+            color: white;
+            font-size: 1em;
+            user-select: none;
+            z-index: 9999;
+            pointer-events: none;
+        }
+
+        #music-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 10px 15px;
+            background: #b71c1c;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            z-index: 10000;
+        }
+        #music-btn:hover {
+            background: #ff1744;
+        }
+    </style>
 </head>
 <body>
 
-  <h1>啦啦啦啦啦</h1>
+    <h1>平安夜快乐 🎄✨</h1>
+    <img src="images/demo2.JPG" alt="圣诞图片">
 
-  <!-- 图片 -->
-  <img src="images/demo1.png" alt="示例图片">
+    <div class="wish">祝你平安喜乐，幸福美满！</div>
+    <div class="wish">愿你心想事成，笑口常开！</div>
+    <div class="wish">愿温暖和快乐围绕你！</div>
+    <div class="wish">圣诞快乐，祝福满满！</div>
+    <div class="wish">新的一年好运连连，心情天天美！</div>
 
-  <br>
+    <!-- 背景音乐 -->
+    <audio id="bg-music" src="merry-christmas.mp3" loop></audio>
+    <button id="music-btn">开启音乐</button>
 
-  <!-- 返回主页 -->
-  <a href="index.html">← 返回主页</a>
+    <script>
+        // 滚动显示祝福
+        const wishes = document.querySelectorAll('.wish');
+        window.addEventListener('scroll', () => {
+            wishes.forEach(wish => {
+                const rect = wish.getBoundingClientRect();
+                if(rect.top < window.innerHeight - 50) {
+                    wish.classList.add('show');
+                }
+            });
+        });
 
+        // 雪花效果
+        const colors = ['#fff', '#ffe0e0', '#ff1744'];
+        function createSnowflake() {
+            const snowflake = document.createElement('div');
+            snowflake.classList.add('snowflake');
+            snowflake.style.left = Math.random() * window.innerWidth + 'px';
+            snowflake.style.fontSize = (10 + Math.random() * 20) + 'px';
+            snowflake.style.color = colors[Math.floor(Math.random() * colors.length)];
+            snowflake.innerHTML = '❄';
+            document.body.appendChild(snowflake);
+
+            const fallDuration = 4000 + Math.random() * 3000;
+            snowflake.animate([
+                { transform: `translateY(0px)` },
+                { transform: `translateY(${window.innerHeight + 50}px)` }
+            ], {
+                duration: fallDuration,
+                iterations: 1,
+                easing: 'linear'
+            });
+
+            setTimeout(() => {
+                snowflake.remove();
+            }, fallDuration);
+        }
+
+        setInterval(createSnowflake, 200);
+
+        // 背景音乐控制
+        const music = document.getElementById('bg-music');
+        const btn = document.getElementById('music-btn');
+        window.addEventListener('load', () => {
+            music.play().catch(() => console.log("需要用户触发播放音乐"));
+        });
+        btn.addEventListener('click', () => {
+            if(music.paused) {
+                music.play();
+                btn.textContent = "暂停音乐";
+            } else {
+                music.pause();
+                btn.textContent = "播放音乐";
+            }
+        });
+    </script>
 </body>
 </html>
